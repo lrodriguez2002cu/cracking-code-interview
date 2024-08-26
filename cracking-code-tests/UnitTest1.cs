@@ -84,10 +84,20 @@ namespace cracking_code_tests
         [TestMethod]
         [DataRow("cbc", true)]
         [DataRow("Tact Coa", true)]
-        [DataRow("Taco Cat", true)]
+        [DataRow("Atco Cta", true)]
         public void TestPalindromePermutation(string s1, bool expected)
         {
             Assert.AreEqual(expected, StringsAndArrays.StringsAndArrays.PalindromePermutation(s1));
+        }
+
+        [TestMethod]
+        [DataRow("pale", "ple", true)]
+        [DataRow("pales", "pale", true)]
+        [DataRow("pale", "bale", true)]
+        [DataRow("pale", "bake", false)]
+        public void TestOneWay(string s1, string ed, bool expected)
+        {
+            Assert.AreEqual(expected, StringsAndArrays.StringsAndArrays.OneWay(s1, ed));
         }
 
     }
