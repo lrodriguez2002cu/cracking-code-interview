@@ -80,6 +80,16 @@ namespace cracking_code_tests
             Assert.AreEqual(expected, StringsAndArrays.StringsAndArrays.URLifyV1(s1, trueLength).Trim());
         }
 
+
+        [TestMethod]
+        [DataRow("cbc", true)]
+        [DataRow("Tact Coa", true)]
+        [DataRow("Taco Cat", true)]
+        public void TestPalindromePermutation(string s1, bool expected)
+        {
+            Assert.AreEqual(expected, StringsAndArrays.StringsAndArrays.PalindromePermutation(s1));
+        }
+
     }
 
 }
