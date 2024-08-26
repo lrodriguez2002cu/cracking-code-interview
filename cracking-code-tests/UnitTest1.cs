@@ -66,6 +66,20 @@ namespace cracking_code_tests
             Assert.AreEqual(StringsAndArrays.StringsAndArrays.IsUniqueV1(s1), expected);
         }
 
+        [TestMethod]
+        [DataRow("ab c   ", 4, "ab%20c")]
+        public void TestURLify(string s1, int trueLength, string expected)
+        {
+            Assert.AreEqual(expected, StringsAndArrays.StringsAndArrays.URLify(s1, trueLength).Trim());
+        }
+
+        [TestMethod]
+        [DataRow("ab c   ", 4, "ab%20c")]
+        public void TestURLifyV1(string s1, int trueLength, string expected)
+        {
+            Assert.AreEqual(expected, StringsAndArrays.StringsAndArrays.URLifyV1(s1, trueLength).Trim());
+        }
+
     }
 
 }
