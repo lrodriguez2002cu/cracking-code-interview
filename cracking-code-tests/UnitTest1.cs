@@ -100,6 +100,17 @@ namespace cracking_code_tests
             Assert.AreEqual(expected, StringsAndArrays.StringsAndArrays.OneWay(s1, ed));
         }
 
+
+        [TestMethod]
+        [DataRow("aabccccdeeeee", "a2bc4de5")]
+        [DataRow("abcdee", "abcdee")]
+
+        public void TestStringCompression(string s1, string expected)
+        {
+            Assert.AreEqual(expected, StringsAndArrays.StringsAndArrays.StringCompression(s1));
+        }
+
+
     }
 
 }

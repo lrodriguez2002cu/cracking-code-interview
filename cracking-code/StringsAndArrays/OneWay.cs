@@ -19,7 +19,7 @@ namespace StringsAndArrays
                     //it is the case that either is an insert a remove or a replace
                     if (/*(j + 1 < ed.Length) && */s[i] == ed[j + 1]) { j += 2; i++; continue; } // there is an addition in j position
                     if (/*(i + 1 < s.Length) &&*/ s[i + 1] == ed[j]) { i += 2; j++; continue; } //there is potentially a removal of one of the i elements
-                    if (/*(j + 1 < ed.Length) && (i + 1 < s.Length)*/? s[i + 1] == ed[j + 1]) { i += 2; j += 2; continue; } //most likely therewas a replacement
+                    if (/*(j + 1 < ed.Length) && (i + 1 < s.Length)*/ s[i + 1] == ed[j + 1]) { i += 2; j += 2; continue; } //most likely therewas a replacement
 
                 }
                 else
