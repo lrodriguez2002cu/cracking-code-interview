@@ -108,6 +108,69 @@ namespace cracking_code_tests
 
             CollectionAssert.AreEqual(new List<int>() { 1, 2, 4, 6, 7 }, after);
         }
+
+        [TestMethod]
+        public void TestPartition()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 3, 5, 8, 5, 10, 2, 1});
+
+            var partitioned = LinkedLists.LinkedLists.Partition(linkedList!, 5);
+
+            var after = LinkedLists.LinkedLists.ToList(partitioned!);
+
+            CollectionAssert.AreEqual(new List<int>() { 3,2, 1, 5, 8, 5, 10 }, after);
+        }
+
+        [TestMethod]
+        public void TestPartition1()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 1, 2, 3,  10, 11, 12 });
+
+            var partitioned = LinkedLists.LinkedLists.Partition(linkedList!, 5);
+
+            var after = LinkedLists.LinkedLists.ToList(partitioned!);
+
+            CollectionAssert.AreEqual(new List<int>() { 1, 2, 3, 10, 11, 12 }, after);
+        }
+
+        [TestMethod]
+        public void TestPartition2()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 1 });
+
+            var partitioned = LinkedLists.LinkedLists.Partition(linkedList!, 5);
+
+            var after = LinkedLists.LinkedLists.ToList(partitioned!);
+
+            CollectionAssert.AreEqual(new List<int>() { 1 }, after);
+        }
+
+
+        [TestMethod]
+        public void TestPartition3()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] {  });
+
+            var partitioned = LinkedLists.LinkedLists.Partition(linkedList!, 5);
+
+            var after = LinkedLists.LinkedLists.ToList(partitioned!);
+
+            CollectionAssert.AreEqual(new List<int>() { }, after);
+        }
+
+        [TestMethod]
+        public void TestPartition4()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 5, 6, 7 });
+
+            var partitioned = LinkedLists.LinkedLists.Partition(linkedList!, 5);
+
+            var after = LinkedLists.LinkedLists.ToList(partitioned!);
+
+            CollectionAssert.AreEqual(new List<int>() { 5, 6, 7}, after);
+        }
+
+
     }
 
 }
