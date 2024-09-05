@@ -1,4 +1,5 @@
 using LinkedLists;
+using System.Xml.Linq;
 
 namespace cracking_code_tests
 {
@@ -15,7 +16,7 @@ namespace cracking_code_tests
         {
             var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 1, 2, 2, 4, 3, 4 });
 
-            
+
             var original = LinkedLists.LinkedLists.ToList(linkedList);
 
             LinkedLists.LinkedLists.RemoveDups(linkedList);
@@ -24,7 +25,7 @@ namespace cracking_code_tests
 
             CollectionAssert.AreNotEqual(original, after);
             CollectionAssert.AreEqual(new List<int>() { 1, 2, 4, 3 }, after);
-            
+
             //Assert.AreEqual(StringsAndArrays.StringsAndArrays.CheckPermutation(s1, s2, true), expected);
         }
 
@@ -51,11 +52,11 @@ namespace cracking_code_tests
         {
             var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 1, 2, 2, 4, 3, 4 });
 
-            var knode= LinkedLists.LinkedLists.KtoLast(linkedList, 3);
+            var knode = LinkedLists.LinkedLists.KtoLast(linkedList, 3);
 
             var after = LinkedLists.LinkedLists.ToList(knode);
 
-            CollectionAssert.AreEqual(new List<int>() {  4, 3, 4 }, after);
+            CollectionAssert.AreEqual(new List<int>() { 4, 3, 4 }, after);
 
 
             /// a second
@@ -82,6 +83,30 @@ namespace cracking_code_tests
             Assert.AreEqual(0, after3.Count);
 
 
+        }
+
+        [TestMethod]
+        public void TestDeleteMiddleNode()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 1, 2, 4, 5, 6 });
+
+            var knode = LinkedLists.LinkedLists.DeleteMiddleNode(linkedList!);
+
+            var after = LinkedLists.LinkedLists.ToList(knode);
+
+            CollectionAssert.AreEqual(new List<int>() { 1, 2, 5, 6 }, after);
+        }
+
+        [TestMethod]
+        public void TestDeleteMiddleNode1()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 1, 2, 4, 5, 6, 7 });
+
+            var knode = LinkedLists.LinkedLists.DeleteMiddleNode(linkedList!);
+
+            var after = LinkedLists.LinkedLists.ToList(knode);
+
+            CollectionAssert.AreEqual(new List<int>() { 1, 2, 4, 6, 7 }, after);
         }
     }
 
