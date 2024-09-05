@@ -292,7 +292,40 @@ namespace cracking_code_tests
         }
 
 
+        [TestMethod]
+        public void TestLoopDetectionTrue()
+        {
+            //lets make an intersected list 
+            var tail = new int[] { 2, 9, 2 };
 
+            var head1 = new int[] { 3, 4 };
+            
+            var linkedList = LinkedLists.LinkedLists.ListOf(tail, out var tailnode);
+            var head1List = LinkedLists.LinkedLists.ListOf(head1, out var tail1);
+
+            //make the loop
+            tailnode.Next = head1List;
+            tail1.Next = head1List;
+
+            var result = LinkedLists.LinkedLists.LoopDetection(linkedList);
+
+            Assert.AreEqual(head1List, result);
+        }
+
+        [TestMethod]
+        public void TestLoopDetectionFalse()
+        {
+            //lets make an intersected list 
+            var tail = new int[] { 2, 9, 2 };
+
+            var head1 = new int[] { 3, 4 };
+
+            var linkedList = LinkedLists.LinkedLists.ListOf(tail, out var tailnode);
+            
+            var result = LinkedLists.LinkedLists.LoopDetection(linkedList);
+
+            Assert.AreEqual(null, result);
+        }
     }
 
 }
