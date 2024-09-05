@@ -34,8 +34,9 @@ namespace LinkedLists
                
                 var value = (p1?.Value?? 0 ) + (p2?.Value??0) + inc;
 
-                if (value >10) inc = 1; 
+                if (value >=10) inc = 1; 
                 else inc = 0;
+
                 value = value % 10;
 
                 if (result == null)
@@ -63,7 +64,7 @@ namespace LinkedLists
             var diff = l1count - l2count;
             var result = SumListsNormalOrderInternal(l1, l2, diff);
 
-            return result.Node;
+            return result.Increment > 0? CreatePartialSum(0, 0, result.Increment, result.Node).Node : result.Node;
         }
 
         public record PartialSum(Node<int>? Node, int Increment);
@@ -97,7 +98,8 @@ namespace LinkedLists
 
         private static PartialSum CreatePartialSum(int val1, int val2, int inc, Node<int>? nextNode) {
             var val = val1 + val2 + inc;
-            var increment = val > 10 ? 1 : 0;
+
+            var increment = val >= 10 ? 1 : 0;
 
             return new PartialSum(new Node<int>(val % 10)
             {

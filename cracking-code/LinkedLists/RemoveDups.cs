@@ -18,6 +18,10 @@ namespace LinkedLists
         public Node(T value) { 
            this.Value = value;
         }
+
+        public override string ToString() {
+            return Value?.ToString() ?? "<null>" + Next?.ToString() ?? "";
+        }
     }
 
 

@@ -215,6 +215,7 @@ namespace cracking_code_tests
         [TestMethod]
         [DataRow(new int[] { 2, 9, 5 }, new int[] { 6, 1, 7 }, new int[] { 9, 1, 2 })]
         [DataRow(new int[] { 9, 5 }, new int[] { 6, 1, 7 }, new int[] { 7, 1, 2 })]
+        [DataRow(new int[] { 9, 9, 9 }, new int[] { 1 }, new int[] { 1, 0, 0, 0 })]
         public void TestSumListsNormalOrder(int[] l1, int[] l2, int[] expected)
         {
             var linkedList = LinkedLists.LinkedLists.ListOf(l1);
