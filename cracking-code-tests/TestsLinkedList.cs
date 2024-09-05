@@ -170,6 +170,53 @@ namespace cracking_code_tests
             CollectionAssert.AreEqual(new List<int>() { 5, 6, 7}, after);
         }
 
+        [TestMethod]
+        public void TestSumLists()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 5, 9, 2 });
+            var linkedList1 = LinkedLists.LinkedLists.ListOf(new int[] { 7, 1, 6 });
+
+            var sumList = LinkedLists.LinkedLists.SumLists(linkedList!, linkedList1!);
+
+            var after = LinkedLists.LinkedLists.ToList(sumList!);
+
+            CollectionAssert.AreEqual(new List<int>() { 2, 1, 9}, after);
+        }
+
+        [TestMethod]
+        public void TestSumListsRecursive()
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(new int[] { 5, 9, 2 });
+            var linkedList1 = LinkedLists.LinkedLists.ListOf(new int[] { 7, 1, 6 });
+
+            var sumList = LinkedLists.LinkedLists.SumListsRecursive(linkedList!, linkedList1!);
+
+            var after = LinkedLists.LinkedLists.ToList(sumList!);
+
+            CollectionAssert.AreEqual(new List<int>() { 2, 1, 9 }, after);
+        }
+
+
+        [TestMethod]
+        [DataRow(new int[] { 5, 9, 2 }, new int[] { 7, 1, 6 }, new int[] { 2, 1, 9 })]
+        public void TestSumListsRecursive(int[] l1, int[] l2, int[] expected)
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(l1);
+            var linkedList1 = LinkedLists.LinkedLists.ListOf(l2);
+
+            var sumList = LinkedLists.LinkedLists.SumListsRecursive(linkedList!, linkedList1!);
+
+            var sumArr = LinkedLists.LinkedLists.ToList(sumList!);
+
+            CollectionAssert.AreEqual(new List<int>(expected), sumArr);
+        }
+
+
+        public void TestSumListsFollowUp()
+        {
+            
+        }
+
 
     }
 
