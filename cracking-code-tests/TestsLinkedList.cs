@@ -229,6 +229,23 @@ namespace cracking_code_tests
         }
 
 
+        [TestMethod]
+        [DataRow(new int[] { 2, 9, 2 }, true)]
+        [DataRow(new int[] { 2, 9, 9, 2 }, true)]
+        [DataRow(new int[] { 2, 9, 3, 2 }, false)]
+        [DataRow(new int[] { 2, 9 }, false)]
+        [DataRow(new int[] { 2 }, true)]
+
+        public void TestPalindrome(int[] l1, bool expected)
+        {
+            var linkedList = LinkedLists.LinkedLists.ListOf(l1);
+            
+            var result = LinkedLists.LinkedLists.Palindrome(linkedList!);
+
+            Assert.AreEqual(expected, result);
+        }
+
+
     }
 
 }
