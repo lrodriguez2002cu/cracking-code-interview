@@ -212,9 +212,19 @@ namespace cracking_code_tests
         }
 
 
-        public void TestSumListsFollowUp()
+        [TestMethod]
+        [DataRow(new int[] { 2, 9, 5 }, new int[] { 6, 1, 7 }, new int[] { 9, 1, 2 })]
+        [DataRow(new int[] { 9, 5 }, new int[] { 6, 1, 7 }, new int[] { 7, 1, 2 })]
+        public void TestSumListsNormalOrder(int[] l1, int[] l2, int[] expected)
         {
-            
+            var linkedList = LinkedLists.LinkedLists.ListOf(l1);
+            var linkedList1 = LinkedLists.LinkedLists.ListOf(l2);
+
+            var sumList = LinkedLists.LinkedLists.SumListsNormalOrder(linkedList!, linkedList1!);
+
+            var sumArr = LinkedLists.LinkedLists.ToList(sumList!);
+
+            CollectionAssert.AreEqual(new List<int>(expected), sumArr);
         }
 
 

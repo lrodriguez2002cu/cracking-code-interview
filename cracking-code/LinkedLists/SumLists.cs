@@ -9,6 +9,19 @@ namespace LinkedLists
 {
     public partial class LinkedLists
     {
+
+        public static int Count<T>(Node<T> l1) {
+            int count = 0;
+            var l = l1;
+            while (l != null)
+            {
+                count ++;
+                l = l?.Next;
+            }
+
+            return count;
+        }
+
         public static Node<int>? SumLists(Node<int> l1, Node<int> l2)
         {
             var p1 = l1;
@@ -45,8 +58,63 @@ namespace LinkedLists
 
         public static Node<int>? SumListsNormalOrder(Node<int> l1, Node<int> l2)
         {
-            
-            return null;
+            var l1count = Count(l1);
+            var l2count = Count(l2);
+            var diff = l1count - l2count;
+            var result = SumListsNormalOrderInternal(l1, l2, diff);
+
+            return result.Node;
+        }
+
+        public record PartialSum(Node<int>? Node, int Increment);
+
+        public static PartialSum SumListsNormalOrderInternal(Node<int> l1, Node<int> l2, int diff)
+        {
+
+            if (diff == 0)
+            {
+                if (l1.Next == null && l2.Next == null)
+                {  //start sum
+                    var val = l1.Value + l2.Value;
+                    var increment = val > 10 ? 1 : 0;
+                    return new PartialSum(new Node<int>(val % 10), increment);
+                }
+                else
+                {
+                    var result = SumListsNormalOrderInternal(l1.Next!, l2.Next!, 0);
+
+                    var val = l1.Value + l2.Value + result.Increment;
+                    var increment = val > 10 ? 1 : 0;
+
+                    return new PartialSum(new Node<int>(val % 10)
+                    {
+                        Next = result.Node
+                    }, increment);
+                }
+            }
+            else
+            if (diff > 0)
+            {
+                var result = SumListsNormalOrderInternal(l1.Next!, l2, diff - 1);
+                var val = l1.Value + result.Increment;
+                var increment = val > 10 ? 1 : 0;
+                return new PartialSum(new Node<int>(val % 10)
+                {
+                    Next = result.Node
+                }, increment);
+            }
+            else {
+
+                var result = SumListsNormalOrderInternal(l1, l2.Next!, diff + 1);
+
+                var val = l2.Value + result.Increment;
+                var increment = val>10 ? 1 : 0;
+                return new PartialSum(new Node<int>(val%10)
+                {
+                    Next = result.Node
+                }, increment);
+                
+            }
         }
 
 
