@@ -245,6 +245,53 @@ namespace cracking_code_tests
             Assert.AreEqual(expected, result);
         }
 
+        [TestMethod]
+        public void TestIntersectsTrue()
+        {
+            //lets make an intersected list 
+            var tail = new int[] { 2, 9, 2 };
+
+            var head1 = new int[] { 3, 4 };
+            var head2 = new int[] { 5, 6 };
+
+            var linkedList = LinkedLists.LinkedLists.ListOf(tail);
+            var head1List = LinkedLists.LinkedLists.ListOf(head1, out var tail1);
+            var head2List = LinkedLists.LinkedLists.ListOf(head2, out var tail2);
+
+            //link the lists so that the join element is the linkedlist node
+            tail1!.Next = linkedList;
+            tail2!.Next = linkedList;
+
+            var result = LinkedLists.LinkedLists.Intersects(head1List, head2List);
+
+            Assert.AreEqual(linkedList, result);
+        }
+
+
+        [TestMethod]
+        public void TestIntersectsFalse()
+        {
+            //lets make an intersected list 
+            var tail = new int[] { 2, 9, 2 };
+
+            var head1 = new int[] { 3, 4 };
+            var head2 = new int[] { 5, 6 };
+
+            var linkedList = LinkedLists.LinkedLists.ListOf(tail);
+            var head1List = LinkedLists.LinkedLists.ListOf(head1, out var tail1);
+            var head2List = LinkedLists.LinkedLists.ListOf(head2, out var tail2);
+
+            //removed the link in the lists so that the join element is the linkedlist node
+            //tail1!.Next = linkedList;
+            //tail2!.Next = linkedList;
+
+            var result = LinkedLists.LinkedLists.Intersects(head1List, head2List);
+
+            // no node is the intersection so
+            Assert.AreEqual(null, result); 
+        }
+
+
 
     }
 

@@ -9,15 +9,12 @@ namespace LinkedLists
     */
 
 
-    public class Node<T> {
+    public class Node<T>(T value)
+    {
 
-        public T Value { get; set; }
-        
+        public T Value { get; set; } = value;
+
         public Node<T>? Next { get; set; }
-
-        public Node(T value) { 
-           this.Value = value;
-        }
 
         public override string ToString() {
             return Value?.ToString() ?? "<null>" + Next?.ToString() ?? "";
@@ -29,8 +26,12 @@ namespace LinkedLists
 
     public partial class LinkedLists
     {
+        public static Node<T>? ListOf<T>(T[] values)
+        {
+            return ListOf(values, out _);
+        }
 
-        public static Node<T>? ListOf<T>(T[] values) {
+        public static Node<T>? ListOf<T>(T[] values, out Node<T>? tail ) {
 
             Node <T>? head = null;
             Node <T>? node= null;
@@ -49,6 +50,7 @@ namespace LinkedLists
                 }
                 
             }
+            tail = node; //keeps the tail at the end of the iterartions
             return head;
         }
 
