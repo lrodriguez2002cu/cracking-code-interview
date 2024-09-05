@@ -70,51 +70,39 @@ namespace LinkedLists
 
         public static PartialSum SumListsNormalOrderInternal(Node<int> l1, Node<int> l2, int diff)
         {
-
             if (diff == 0)
             {
                 if (l1.Next == null && l2.Next == null)
-                {  //start sum
-                    var val = l1.Value + l2.Value;
-                    var increment = val > 10 ? 1 : 0;
-                    return new PartialSum(new Node<int>(val % 10), increment);
+                {  
+                    //start sum as alignment was achieved
+                    return CreatePartialSum(l1.Value, l2.Value, 0, null);
                 }
                 else
                 {
                     var result = SumListsNormalOrderInternal(l1.Next!, l2.Next!, 0);
-
-                    var val = l1.Value + l2.Value + result.Increment;
-                    var increment = val > 10 ? 1 : 0;
-
-                    return new PartialSum(new Node<int>(val % 10)
-                    {
-                        Next = result.Node
-                    }, increment);
+                    return CreatePartialSum(l1.Value, l2.Value, result.Increment, result.Node);
                 }
             }
             else
             if (diff > 0)
             {
                 var result = SumListsNormalOrderInternal(l1.Next!, l2, diff - 1);
-                var val = l1.Value + result.Increment;
-                var increment = val > 10 ? 1 : 0;
-                return new PartialSum(new Node<int>(val % 10)
-                {
-                    Next = result.Node
-                }, increment);
-            }
+                return CreatePartialSum(l1.Value, 0, result.Increment, result.Node);
+            }                
             else {
-
                 var result = SumListsNormalOrderInternal(l1, l2.Next!, diff + 1);
-
-                var val = l2.Value + result.Increment;
-                var increment = val>10 ? 1 : 0;
-                return new PartialSum(new Node<int>(val%10)
-                {
-                    Next = result.Node
-                }, increment);
-                
+                return CreatePartialSum(l2.Value, 0, result.Increment, result.Node);
             }
+        }
+
+        private static PartialSum CreatePartialSum(int val1, int val2, int inc, Node<int>? nextNode) {
+            var val = val1 + val2 + inc;
+            var increment = val > 10 ? 1 : 0;
+
+            return new PartialSum(new Node<int>(val % 10)
+            {
+                Next = nextNode
+            }, increment);
         }
 
 
