@@ -1,12 +1,6 @@
 
 
-using LinkedLists;
-using System.Collections;
 using System.Diagnostics;
-using System.Numerics;
-using System.Threading.Tasks.Sources;
-using System.Xml.Linq;
-
 namespace TreesAndGraphs
 {
     /*
@@ -40,12 +34,12 @@ namespace TreesAndGraphs
         
         public Node<T>[] Nodes { get ; set ; }
 
-        bool Bidirectional { get; set; }
+        bool Directed { get; set; }
 
         public MyGraph(Node<T>[] nodes, bool bidirectional = false) {
             Nodes = nodes;
             AdjacencyMatrix = new bool[Nodes.Length, Nodes.Length];
-            Bidirectional = bidirectional;
+            Directed = !bidirectional;
         }
 
         private int getIndex(Node<T> n){
@@ -78,7 +72,7 @@ namespace TreesAndGraphs
             var j = getIndex(t);
 
             AdjacencyMatrix[i, j] = true;
-            if (Bidirectional) {
+            if (!Directed) {
                 AdjacencyMatrix[j, i] = true;
             }
 

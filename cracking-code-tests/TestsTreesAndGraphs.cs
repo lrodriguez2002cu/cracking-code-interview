@@ -196,7 +196,6 @@ namespace cracking_code_tests
             // remove next statement, so no connection
             //graph.AddEdge(t3, c4);
 
-
             var result = TreesAndGraphs.TreesAndGraphs.BreadthFirstSearch(s1, t1, graph, (n, r) => { });
 
             //expected result would be s1-s2-c4-t3-t1
