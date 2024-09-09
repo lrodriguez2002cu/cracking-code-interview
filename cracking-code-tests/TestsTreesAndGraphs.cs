@@ -16,7 +16,6 @@ namespace cracking_code_tests
             var n2 = new Node<int>(2);
             var n3 = new Node<int>(3);
             var n4 = new Node<int>(4);
-
             
             var graph = new MyGraph<int>(new Node<int>[] { n1, n2, n3, n4 });
 
@@ -44,7 +43,6 @@ namespace cracking_code_tests
             var n5= new Node<int>(5);
             var n6 = new Node<int>(6);
 
-
             var graph = new MyGraph<int>(new Node<int>[] { n1, n2, n3, n4, n5, n6 });
 
             graph.AddEdge(n1, n2);
@@ -64,7 +62,6 @@ namespace cracking_code_tests
 
         public void TestRouteBetween(int sn, int tn, bool expected)
         {
-
             //this graph would be:
             // 1->2->4->3
 
@@ -92,7 +89,6 @@ namespace cracking_code_tests
 
         public void TestRouteBetween1(int sn, int tn, bool expected)
         {
-
             //this graph would be:
             // 1->2->4->3
 
@@ -111,6 +107,104 @@ namespace cracking_code_tests
             var result = TreesAndGraphs.TreesAndGraphs.RouteBetweenDephFirst(graph, nodes[sn-1], nodes[tn-1]);
 
             Assert.AreEqual(expected, result);
+        }
+
+
+        [TestMethod]
+
+        public void TestBreadthFirstSearch()
+        {
+            //this graph would be:
+            // s1->s2
+            // s1->s3
+            // s2->c4
+
+
+            //this graph would be:
+            // t1->t2
+            // t1->t3
+            // t3->c4
+
+            //build some nodes
+            var s1 = new Node<int>(1);
+            var s2 = new Node<int>(2);
+            var s3 = new Node<int>(3);
+            var c4 = new Node<int>(4);
+
+            var t1 = new Node<int>(11);
+            var t2 = new Node<int>(12);
+            var t3 = new Node<int>(13);
+
+
+            var graph = new MyGraph<int>([s1, s2, s3, c4 , t1, t2, t3], true);
+            
+            graph.AddEdge(s1, s2);
+            graph.AddEdge(s1, s3);
+            graph.AddEdge(s2, c4);
+
+            graph.AddEdge(t1, t2);
+            graph.AddEdge(t1, t3);
+            graph.AddEdge(t3, c4);
+
+
+            var result = TreesAndGraphs.TreesAndGraphs.BreadthFirstSearch(s1, t1, graph, (n, r)=> { });
+
+            //expected result would be s1-s2-c4-t3-t1
+            Node<int> [] expected = [s1, s2, c4, t3, t1];
+
+            Assert.AreEqual(expected.Length, result.Length);
+            
+            CollectionAssert.AreEqual(expected.Select(n=> n.Value).ToArray(), result.Select(n=> n.Value).ToArray());
+        }
+
+
+        [TestMethod]
+
+        public void TestBreadthFirstSearchNotFound()
+        {
+            //this graph would be:
+            // s1->s2
+            // s1->s3
+            // s2->c4
+
+
+            //this graph would be:
+            // t1->t2
+            // t1->t3
+            // t3->c4
+
+            //build some nodes
+            var s1 = new Node<int>(1);
+            var s2 = new Node<int>(2);
+            var s3 = new Node<int>(3);
+            var c4 = new Node<int>(4);
+
+            var t1 = new Node<int>(11);
+            var t2 = new Node<int>(12);
+            var t3 = new Node<int>(13);
+
+
+            var graph = new MyGraph<int>([s1, s2, s3, c4, t1, t2, t3], true);
+
+            graph.AddEdge(s1, s2);
+            graph.AddEdge(s1, s3);
+            graph.AddEdge(s2, c4);
+
+            graph.AddEdge(t1, t2);
+            graph.AddEdge(t1, t3);
+            
+            // remove next statement, so no connection
+            //graph.AddEdge(t3, c4);
+
+
+            var result = TreesAndGraphs.TreesAndGraphs.BreadthFirstSearch(s1, t1, graph, (n, r) => { });
+
+            //expected result would be s1-s2-c4-t3-t1
+            Node<int>[] expected = [];
+
+            Assert.AreEqual(expected.Length, result.Length);
+
+            CollectionAssert.AreEqual(expected.Select(n => n.Value).ToArray(), result.Select(n => n.Value).ToArray());
         }
 
 
