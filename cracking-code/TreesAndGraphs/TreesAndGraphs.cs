@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using System.Dynamic;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 namespace TreesAndGraphs
 {
     /*
@@ -481,7 +482,39 @@ namespace TreesAndGraphs
 
         public static Action<Node<T>> CollectInOrder<T>(List<Node<T>> nodesVisited) {
 
-            return (Node<T> node) => { nodesVisited.Add(node); };
+            return nodesVisited.Add;
+        }
+
+
+        public static Dictionary<int, List<BinaryTreeNode<T>>> ListOfDepths<T>(BinaryTree<T> tree) {
+
+            var result = new Dictionary<int, List<BinaryTreeNode<T>>>();
+            ListOfDepths<T>(tree.Root, result, 0);
+
+            return result;
+        }
+
+        private static void ListOfDepths<T>(BinaryTreeNode<T> treeNode, Dictionary<int, List<BinaryTreeNode<T>>> result, int depth)
+        {
+            if (result.ContainsKey(depth))
+            {
+
+                result[depth].Add(treeNode);
+            }
+            else
+            {
+                result[depth] = [treeNode];
+            }
+
+            if (treeNode.Left != null) {
+                ListOfDepths<T>(treeNode.Left, result, depth+1);
+            }
+
+            if (treeNode.Right != null)
+            {
+                ListOfDepths<T>(treeNode.Right, result, depth + 1);
+            }
+
         }
     }
 

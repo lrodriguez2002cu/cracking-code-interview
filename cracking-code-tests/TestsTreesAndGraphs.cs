@@ -223,7 +223,23 @@ namespace cracking_code_tests
             TreesAndGraphs.TreesAndGraphs.InOrderTraversal(result, fn);
 
             CollectionAssert.AreEqual(resultNodes.Select(n => n.Value).ToArray(), originalNodes);
-            
+
+        }
+
+
+        [TestMethod]
+        public void TestListOfDepths()
+        {
+
+            int[] originalNodes = [1, 2, 3, 4, 5, 6];
+
+            var result = TreesAndGraphs.TreesAndGraphs.GetMinimalTree(originalNodes);
+
+            var listOfDepths = TreesAndGraphs.TreesAndGraphs.ListOfDepths(result);
+
+            Assert.AreEqual(listOfDepths[0].Count, 1);
+            Assert.AreEqual(listOfDepths[1].Count, 2);
+            Assert.AreEqual(listOfDepths[2].Count, 3);
 
         }
 
