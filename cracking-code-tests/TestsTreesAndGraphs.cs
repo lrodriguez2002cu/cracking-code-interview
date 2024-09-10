@@ -212,13 +212,13 @@ namespace cracking_code_tests
         public void TestMinimalTree()
         {
 
-            int [] originalNodes = [1, 2, 3, 4, 5, 6];
+            int[] originalNodes = [1, 2, 3, 4, 5, 6];
 
             var result = TreesAndGraphs.TreesAndGraphs.GetMinimalTree(originalNodes);
 
-            var resultNodes =  new List<Node<int>>();
-            var fn =TreesAndGraphs.TreesAndGraphs.CollectInOrder(resultNodes);
-            
+            var resultNodes = new List<Node<int>>();
+            var fn = TreesAndGraphs.TreesAndGraphs.CollectInOrder(resultNodes);
+
             //if the algorithm worked then an in order traversal would give an ordered array. 
             TreesAndGraphs.TreesAndGraphs.InOrderTraversal(result, fn);
 
@@ -324,7 +324,7 @@ namespace cracking_code_tests
         [TestMethod]
         public void TestBuildOrderSimple()
         {
-            
+
             var prjsInOrder = TreesAndGraphs.TreesAndGraphs.BuildOrder([1, 2, 3, 4, 5], [(1, 2), (2, 3), (3, 4), (4, 5)]);
 
             CollectionAssert.AreEqual(new int[] { 5, 4, 3, 2, 1 }, prjsInOrder);
@@ -342,13 +342,13 @@ namespace cracking_code_tests
             //2->4
             //3->5
             //5->4
-            var prjsInOrder = TreesAndGraphs.TreesAndGraphs.BuildOrder([1, 2, 3, 4, 5], [(1, 2), (1, 3), (3, 4), (2, 4), (3, 5), (5, 4) ]);
+            var prjsInOrder = TreesAndGraphs.TreesAndGraphs.BuildOrder([1, 2, 3, 4, 5], [(1, 2), (1, 3), (3, 4), (2, 4), (3, 5), (5, 4)]);
 
             //CollectionAssert.AreEqual(new int[] { 4, 5, 2, 3, 1 }, prjsInOrder);
             CollectionAssert.AreEqual(new int[] { 4, 2, 5, 3, 1 }, prjsInOrder);
 
         }
-        
+
         [TestMethod]
         public void TestBuildOrderFailsDueToCycle()
         {
@@ -357,10 +357,10 @@ namespace cracking_code_tests
             //3->4
             //4->1
 
-            var ex= Assert.ThrowsException<Exception>(() => { TreesAndGraphs.TreesAndGraphs.BuildOrder([1, 2, 3, 4], [(1, 2), (1, 3), (3, 4), (4, 1)]); });
+            var ex = Assert.ThrowsException<Exception>(() => { TreesAndGraphs.TreesAndGraphs.BuildOrder([1, 2, 3, 4], [(1, 2), (1, 3), (3, 4), (4, 1)]); });
 
             Assert.IsTrue(ex.Message.Contains("A cycle in the build order was found"));
-            
+
 
         }
 
@@ -373,15 +373,66 @@ namespace cracking_code_tests
             //3->4
             //4->1
 
-            var prjsInOrder = TreesAndGraphs.TreesAndGraphs.BuildOrder(['a', 'b', 'c', 'd', 'e', 'f' ], 
-                         [('d', 'a'), ('b', 'f'), ('d', 'b'), ('a', 'f'), ('c', 'd')]); 
-            
+            var prjsInOrder = TreesAndGraphs.TreesAndGraphs.BuildOrder(['a', 'b', 'c', 'd', 'e', 'f'],
+                         [('d', 'a'), ('b', 'f'), ('d', 'b'), ('a', 'f'), ('c', 'd')]);
+
             //note that the order of the tuples are inverted due to my interpretation of this..
             // didn't change it because would need to change all previous tests.
 
-            CollectionAssert.AreEqual(new char[] { 'f', 'e', 'a', 'b', 'd', 'c'}, prjsInOrder);
+            CollectionAssert.AreEqual(new char[] { 'f', 'e', 'a', 'b', 'd', 'c' }, prjsInOrder);
 
 
+        }
+
+        [TestMethod]
+        public void TestFirstCommonAncestor()
+        {
+
+            //build a linear tree, just a root with a child and a child of this 1->2->3 (all of them the left child)
+            BinaryTreeNode<int> childOfChildOfRoot = new BinaryTreeNode<int>(3);
+            BinaryTreeNode<int> childOfRoot = new BinaryTreeNode<int>(2, null, childOfChildOfRoot);
+            BinaryTreeNode<int> root = new BinaryTreeNode<int>(1, null, childOfRoot);
+
+            var commonAncestor = TreesAndGraphs.TreesAndGraphs.FirstCommonAncestor(new BinaryTree<int>(root), childOfRoot, childOfChildOfRoot);
+
+            Assert.AreEqual(commonAncestor, root);
+        }
+
+
+        [TestMethod]
+        public void TestFirstCommonAncestorSecondCase()
+        {
+
+            //build a linear tree, just a root with a child and a child of this 1->2->4 (all of them the left child)
+            //1->3->5
+            BinaryTreeNode<int> node4 = new BinaryTreeNode<int>(4);
+            BinaryTreeNode<int> node5 = new BinaryTreeNode<int>(5);
+            BinaryTreeNode<int> node2 = new BinaryTreeNode<int>(2, null, node4);
+            BinaryTreeNode<int> node3 = new BinaryTreeNode<int>(3, null, node5);
+            BinaryTreeNode<int> node1 = new BinaryTreeNode<int>(1, node3, node2);
+
+
+            var commonAncestor = TreesAndGraphs.TreesAndGraphs.FirstCommonAncestor(new BinaryTree<int>(node1), node5, node4);
+
+            Assert.AreEqual(commonAncestor, node1);
+        }
+
+        [TestMethod]
+        public void TestFirstCommonAncestorThirdCase()
+        {
+
+            //build a linear tree, just a root with a child and a child of this 1->2->4 (all of them the left child)
+            //1->3->5
+            BinaryTreeNode<int> node5 = new BinaryTreeNode<int>(5);
+            BinaryTreeNode<int> node4 = new BinaryTreeNode<int>(4, node5, null);
+            BinaryTreeNode<int> node3 = new BinaryTreeNode<int>(3, null, null);
+            BinaryTreeNode<int> node2 = new BinaryTreeNode<int>(2, node4, node3);
+            BinaryTreeNode<int> node1 = new BinaryTreeNode<int>(1, node2, null);
+
+
+            var commonAncestor = TreesAndGraphs.TreesAndGraphs.FirstCommonAncestor(new BinaryTree<int>(node1), node5, node3);
+
+            Assert.AreEqual(commonAncestor, node2);
         }
 
     }

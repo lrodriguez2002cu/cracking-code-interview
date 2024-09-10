@@ -119,15 +119,56 @@ namespace TreesAndGraphs
         }
 
 
-        //var positions = new List<Node<T>>[projects.Length + 1];
+        
+        public static BinaryTreeNode<T>? FirstCommonAncestor<T>(BinaryTree<T> tree, BinaryTreeNode<T> n1, BinaryTreeNode<T> n2) {
 
-        //for (int i = 0; i < prjNodes.Length; i++)
-        //{
-        //    var adjacentCount = graph.Adjacent(prjNodes[i])?.Length??0;
-        //    var list = positions[adjacentCount] ?? new List<Node<T>>();
-        //    list.Add(prjNodes[i]);
-        //    positions[adjacentCount] = list;
-        //}
+            var n1Found = false;
+            var n2Found = false;
+
+            return InOrderTraversalCommonAncestor(tree.Root, tree.Root, n1, n2, ref n1Found, ref n2Found);
+
+        }
+
+        private static BinaryTreeNode<T>? InOrderTraversalCommonAncestor<T>(BinaryTreeNode<T> current, 
+            BinaryTreeNode<T> commonAncestor,            
+            BinaryTreeNode<T> n1, BinaryTreeNode<T> n2, ref bool n1Found, ref bool n2Found)
+        {
+            //reference equality??
+            n1Found = n1Found || n1 == current;
+            n2Found = n2Found || n2 == current;
+
+            if (n1Found && n2Found) {
+                return commonAncestor;
+            }
+
+            
+            var commonAncestorDown = /*n1 == current || n2 == current*/n1Found || n2Found? commonAncestor: current;
+
+            if (current.Left != null)
+            {
+
+             var result1 =   InOrderTraversalCommonAncestor(current.Left, commonAncestorDown, n1, n2, ref n1Found, ref n2Found);
+                if ( result1!= null)
+                {
+                    return result1;
+                }
+            }
+
+            //visitFn(root);
+
+            if (current.Right != null)
+            {
+                var result2= InOrderTraversalCommonAncestor(current.Right, commonAncestorDown, n1, n2, ref n1Found, ref n2Found);
+                if (result2 != null)
+                {
+                    return result2;
+                }
+            }
+
+            return null;
+        }
+
+
     }
 
 }
