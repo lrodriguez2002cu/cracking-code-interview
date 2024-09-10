@@ -364,6 +364,26 @@ namespace cracking_code_tests
 
         }
 
+
+        [TestMethod]
+        public void TestBuildOrderBookExample()
+        {
+            //1->2
+            //1->3
+            //3->4
+            //4->1
+
+            var prjsInOrder = TreesAndGraphs.TreesAndGraphs.BuildOrder(['a', 'b', 'c', 'd', 'e', 'f' ], 
+                         [('d', 'a'), ('b', 'f'), ('d', 'b'), ('a', 'f'), ('c', 'd')]); 
+            
+            //note that the order of the tuples are inverted due to my interpretation of this..
+            // didn't change it because would need to change all previous tests.
+
+            CollectionAssert.AreEqual(new char[] { 'f', 'e', 'a', 'b', 'd', 'c'}, prjsInOrder);
+
+
+        }
+
     }
 }
 
