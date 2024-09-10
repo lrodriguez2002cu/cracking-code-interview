@@ -321,6 +321,49 @@ namespace cracking_code_tests
 
         }
 
+        [TestMethod]
+        public void TestBuildOrderSimple()
+        {
+            
+            var prjsInOrder = TreesAndGraphs.TreesAndGraphs.BuildOrder([1, 2, 3, 4, 5], [(1, 2), (2, 3), (3, 4), (4, 5)]);
+
+            CollectionAssert.AreEqual(new int[] { 5, 4, 3, 2, 1 }, prjsInOrder);
+
+        }
+
+
+
+        [TestMethod]
+        public void TestBuildOrderComplex()
+        {
+            //1->2
+            //1->3
+            //3->4
+            //2->4
+            //3->5
+            //5->4
+            var prjsInOrder = TreesAndGraphs.TreesAndGraphs.BuildOrder([1, 2, 3, 4, 5], [(1, 2), (1, 3), (3, 4), (2, 4), (3, 5), (5, 4) ]);
+
+            //CollectionAssert.AreEqual(new int[] { 4, 5, 2, 3, 1 }, prjsInOrder);
+            CollectionAssert.AreEqual(new int[] { 4, 2, 5, 3, 1 }, prjsInOrder);
+
+        }
+        
+        [TestMethod]
+        public void TestBuildOrderFailsDueToCycle()
+        {
+            //1->2
+            //1->3
+            //3->4
+            //4->1
+
+            var ex= Assert.ThrowsException<Exception>(() => { TreesAndGraphs.TreesAndGraphs.BuildOrder([1, 2, 3, 4], [(1, 2), (1, 3), (3, 4), (4, 1)]); });
+
+            Assert.IsTrue(ex.Message.Contains("A cycle in the build order was found"));
+            
+
+        }
+
     }
 }
 

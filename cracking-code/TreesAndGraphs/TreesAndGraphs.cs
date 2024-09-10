@@ -582,7 +582,7 @@ namespace TreesAndGraphs
             return  result;
 
         }
-
+        
     }
 
 }
