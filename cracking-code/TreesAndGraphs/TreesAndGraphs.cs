@@ -1,26 +1,132 @@
 
 
 using System.Diagnostics;
+using System.Dynamic;
+using System.Net.Http.Headers;
 namespace TreesAndGraphs
 {
     /*
       Cracking the coding interview)
     */
 
-    public class Node<T> { 
-       public T Value { get; set; }
-       //public Node<T>[]? Children { get; set; }
-    
-       public Node(T value) { 
-         Value = value; 
-       }
+    public class TreeNode<T> : Node<T>
+    {
+        public TreeNode(T Value) : base(Value)
+        {
+            this.Value = Value;
+        }
 
-        public override string ToString() {
+        //public T Value { get; set; }
+        public TreeNode<T>[]? Children { get; set; }
+
+        public override string ToString()
+        {
+            return "[" + Value!.ToString() + "]";
+        }
+    }
+
+    public class BinaryTree<T> : IMyGraph<T>
+    {
+
+        public Node<T>[] Nodes { get => getNodes(); set => throw new InvalidOperationException("Nodes can not be set on trees."); } // todo
+        public BinaryTreeNode<T> Root { get; set; }
+
+        Node<T>[] getNodes()
+        {
+            //todo implement this
+            return [];
+        }
+
+        public BinaryTree(BinaryTreeNode<T> root)
+        {
+            this.Root = root;
+        }
+
+        public void AddEdge(Node<T> s, Node<T> t)
+        {
+            throw new InvalidOperationException("Not supported on trees.");
+        }
+
+        public Node<T>[] Adjacent(Node<T> n)
+        {
+            if (n is BinaryTreeNode<T> node)
+            {
+                if (node.Left != null && node.Right != null)
+                {
+                    return [node.Left, node.Right];
+                }
+                else
+                {
+                    var e = node.Left ?? node.Right;
+                    return e != null ? [e] : [];
+                }
+            }
+            else { throw new InvalidOperationException("Adjacent can only be requested on nodes of this tree"); }
+        }
+    }
+
+    public class BinaryTreeNode<T> : TreeNode<T>
+    {
+
+        public BinaryTreeNode<T>? Right { get { return getRight(); } set { setRight(value); } }
+        public BinaryTreeNode<T>? Left { get { return getLeft(); } set { setLeft(value); } }
+
+        public BinaryTreeNode(T Value, BinaryTreeNode<T>? right, BinaryTreeNode<T>? left) : base(Value)
+        {
+            this.Value = Value;
+            Children = new TreeNode<T>[2];
+            Right = right;
+            Left = left;
+        }
+
+        public BinaryTreeNode(T Value) : base(Value)
+        {
+            this.Value = Value;
+            Children = new TreeNode<T>[2];
+        }
+
+        private void setRight(BinaryTreeNode<T> Value)
+        {
+
+            if (Children == null)
+            {
+                Children = new TreeNode<T>[2];
+            }
+            Children[1] = Value;
+        }
+
+        private void setLeft(BinaryTreeNode<T> Value)
+        {
+
+            Children ??= new TreeNode<T>[2];
+            Children[0] = Value;
+        }
+
+        private BinaryTreeNode<T> getRight()
+        {
+            return (BinaryTreeNode<T>)Children[1];
+        }
+
+        private BinaryTreeNode<T> getLeft()
+        {
+            return (BinaryTreeNode<T>)Children[0];
+        }
+
+
+    }
+
+    public class Node<T>(T value)
+    {
+        public T Value { get; set; } = value;
+
+        public override string ToString()
+        {
             return "[" + Value.ToString() + "]";
         }
     }
 
-    public interface IMyGraph<T> {
+    public interface IMyGraph<T>
+    {
 
         Node<T>[] Nodes { get; set; }
         Node<T>[] Adjacent(Node<T> n);
@@ -28,23 +134,28 @@ namespace TreesAndGraphs
         void AddEdge(Node<T> s, Node<T> t);
     }
 
-    public class MyGraph<T> : IMyGraph<T>{
+    public class MyGraph<T> : IMyGraph<T>
+    {
 
         readonly bool[,] AdjacencyMatrix;
-        
-        public Node<T>[] Nodes { get ; set ; }
+
+        public Node<T>[] Nodes { get; set; }
 
         bool Directed { get; set; }
 
-        public MyGraph(Node<T>[] nodes, bool bidirectional = false) {
+        public MyGraph(Node<T>[] nodes, bool bidirectional = false)
+        {
             Nodes = nodes;
             AdjacencyMatrix = new bool[Nodes.Length, Nodes.Length];
             Directed = !bidirectional;
         }
 
-        private int getIndex(Node<T> n){
-            for (var i = 0; i< Nodes.Length; i++) {
-                if (Nodes[i] == n) {
+        private int getIndex(Node<T> n)
+        {
+            for (var i = 0; i < Nodes.Length; i++)
+            {
+                if (Nodes[i] == n)
+                {
                     return i;
                 }
             }
@@ -57,9 +168,11 @@ namespace TreesAndGraphs
             var result = new List<Node<T>>();
 
 
-            for (var j = 0; j < Nodes.Length; j++) {
-                if (AdjacencyMatrix[index, j]) { 
-                   result.Add(Nodes[j]);
+            for (var j = 0; j < Nodes.Length; j++)
+            {
+                if (AdjacencyMatrix[index, j])
+                {
+                    result.Add(Nodes[j]);
                 }
             }
 
@@ -72,41 +185,46 @@ namespace TreesAndGraphs
             var j = getIndex(t);
 
             AdjacencyMatrix[i, j] = true;
-            if (!Directed) {
+            if (!Directed)
+            {
                 AdjacencyMatrix[j, i] = true;
             }
 
         }
     }
 
-    public class Result { 
-       public bool Value { get; set; }
+    public class Result
+    {
+        public bool Value { get; set; }
     }
 
     public partial class TreesAndGraphs
     {
-        public static bool RouteBetweenDephFirst<T>(IMyGraph<T> graph, Node<T> n1, Node<T> n2) { 
-           
-           //Depth first seems to be appropriate
-           List<Node<T>> currentRoute = new List<Node<T>>();
-           
-           Result r =  new Result();
-           HashSet<Node<T>> visiting = new HashSet<Node<T>>();
-           
-           DepthFirst(n1, graph, VisitHasRoute(n2, r), visiting);
-           
-           return r.Value;
+        public static bool RouteBetweenDephFirst<T>(IMyGraph<T> graph, Node<T> n1, Node<T> n2)
+        {
+
+            //Depth first seems to be appropriate
+            List<Node<T>> currentRoute = new List<Node<T>>();
+
+            Result r = new Result();
+            HashSet<Node<T>> visiting = new HashSet<Node<T>>();
+
+            DepthFirst(n1, graph, VisitHasRoute(n2, r), visiting);
+
+            return r.Value;
         }
 
-        public static Action<Node<T>> VisitHasRoute<T>(Node<T> targetNode, Result result) { 
-           return (Node<T>  visitedNode) => {
-               result.Value = result.Value || visitedNode == targetNode; 
+        public static Action<Node<T>> VisitHasRoute<T>(Node<T> targetNode, Result result)
+        {
+            return (Node<T> visitedNode) =>
+            {
+                result.Value = result.Value || visitedNode == targetNode;
             };
         }
 
         public static void DepthFirst<T>(IMyGraph<T> graph, Action<Node<T>> visitFn)
         {
-            HashSet<Node<T>> visiting =  new ();
+            HashSet<Node<T>> visiting = new();
             for (int i = 0; i < graph.Nodes.Length; i++)
             {
                 visiting.Clear();
@@ -119,19 +237,22 @@ namespace TreesAndGraphs
         }
 
 
-        public static void DepthFirst<T>(Node<T> n1, IMyGraph<T> graph, Action <Node<T>> visitFn, HashSet<Node<T>> visiting) { 
-            
+        public static void DepthFirst<T>(Node<T> n1, IMyGraph<T> graph, Action<Node<T>> visitFn, HashSet<Node<T>> visiting)
+        {
+
             if (n1 == null) return;
 
             visiting.Add(n1);
             var adjacent = graph.Adjacent(n1);
 
-            if (adjacent != null) {
+            if (adjacent != null)
+            {
                 for (var i = 0; i < adjacent.Length; i++)
                 {
                     var ch = adjacent[i];
-                    if (!visiting.Contains(ch)) { 
-                       DepthFirst(ch, graph, visitFn, visiting);
+                    if (!visiting.Contains(ch))
+                    {
+                        DepthFirst(ch, graph, visitFn, visiting);
                     }
                 }
             }
@@ -139,9 +260,11 @@ namespace TreesAndGraphs
         }
 
 
-        public static void PrintGraphDepthFirst<T>(IMyGraph<T> myGraph) {
-            
-            DepthFirst(myGraph, (Node<T> n) => { 
+        public static void PrintGraphDepthFirst<T>(IMyGraph<T> myGraph)
+        {
+
+            DepthFirst(myGraph, (Node<T> n) =>
+            {
                 Debug.Write(n.ToString());
             });
         }
@@ -149,11 +272,13 @@ namespace TreesAndGraphs
         public static void PrintGraphBreadthFirst<T>(IMyGraph<T> myGraph)
         {
 
-            BreadthFirst(myGraph, (Node<T> n, List<Node<T>> route) => {
+            BreadthFirst(myGraph, (Node<T> n, List<Node<T>> route) =>
+            {
                 string routeStr = "";
                 string sep = "";
-                foreach (var node in route) { 
-                   routeStr += sep + node.ToString();
+                foreach (var node in route)
+                {
+                    routeStr += sep + node.ToString();
                     sep = "->";
                 }
 
@@ -162,29 +287,25 @@ namespace TreesAndGraphs
         }
 
 
-        //public static bool RouteBetweenBreadthFirst<T>(IMyGraph<T> graph, Node<T> n1, Node<T> n2)
-        //{
-        //    return false;
-        //}
 
-        public static void BreadthFirst<T>(IMyGraph<T> graph, Action<Node<T>, List<Node<T>>> visitFn) {
+        public static void BreadthFirst<T>(IMyGraph<T> graph, Action<Node<T>, List<Node<T>>> visitFn)
+        {
             HashSet<Node<T>> visiting = new();
-            BreadthFirst<T>(graph.Nodes[0], graph, visitFn, visiting);       
+            BreadthFirst<T>(graph.Nodes[0], graph, visitFn, visiting);
         }
-
-
 
         private record NR<T>(Node<T> Node, List<Node<T>> Route);
 
-        public static void BreadthFirst<T>(Node<T> n1, IMyGraph<T> graph, Action<Node<T>, List<Node<T>>> visitFn, HashSet<Node<T>> visiting) 
+        public static void BreadthFirst<T>(Node<T> n1, IMyGraph<T> graph, Action<Node<T>, List<Node<T>>> visitFn, HashSet<Node<T>> visiting)
         {
 
-            Queue<NR<T>> queue = new ();
+            Queue<NR<T>> queue = new();
 
-            queue.Enqueue(new NR<T>(n1, new List<Node<T>>() { n1}));
+            queue.Enqueue(new NR<T>(n1, new List<Node<T>>() { n1 }));
             if (n1 == null) return;
 
-            while (queue.Count > 0) {
+            while (queue.Count > 0)
+            {
 
                 var t = queue.Dequeue();
                 var current = t.Node;
@@ -205,10 +326,10 @@ namespace TreesAndGraphs
                         newRoute.Add(ch);
                         queue.Enqueue(new NR<T>(ch, newRoute));
                     }
-                    
+
                 }
             }
-            
+
         }
 
         //The algorithm consists in start searching from both ends
@@ -220,23 +341,24 @@ namespace TreesAndGraphs
             //cycle control..
             var visiting1 = new Dictionary<Node<T>, List<Node<T>>>();
             var visiting2 = new Dictionary<Node<T>, List<Node<T>>>();
-            
+
             Queue<NR<T>> queue1 = new();
             queue1.Enqueue(new NR<T>(n1, new List<Node<T>>() { n1 }));
 
 
             Queue<NR<T>> queue2 = new();
-            queue2.Enqueue(new NR<T>(n2, new List<Node<T>>() { n2}));
+            queue2.Enqueue(new NR<T>(n2, new List<Node<T>>() { n2 }));
 
             while (queue1.Count > 0 && queue2.Count > 0)
             {
                 queue1.TryDequeue(out var t1);
                 var current1 = t1?.Node;
                 var route1 = t1?.Route;
-                var adjacent1 = current1!= null? graph.Adjacent(current1): Array.Empty<Node<T>>();
+                var adjacent1 = current1 != null ? graph.Adjacent(current1) : Array.Empty<Node<T>>();
 
-                if (current1 != null) { 
-                  visiting1.Add(current1, t1!.Route);
+                if (current1 != null)
+                {
+                    visiting1.Add(current1, t1!.Route);
                 }
 
                 queue2.TryDequeue(out var t2);
@@ -246,21 +368,22 @@ namespace TreesAndGraphs
 
                 if (current2 != null)
                 {
-                  visiting2.Add(current2, t2!.Route);                    
+                    visiting2.Add(current2, t2!.Route);
                 }
 
-                if (current2!= null && visiting1.TryGetValue(current2, out var routeVisited1)) { 
-                   //route from both ends concatenated
+                if (current2 != null && visiting1.TryGetValue(current2, out var routeVisited1))
+                {
+                    //route from both ends concatenated
                     var res = new List<Node<T>>();
                     res.AddRange(routeVisited1);
-                    
+
                     var r = t2!.Route;
                     r.Reverse();
                     res.AddRange(r[1..]);
                     return res.ToArray();
                 }
 
-                if (current1!= null && visiting2.TryGetValue(current1, out var routeVisited2))
+                if (current1 != null && visiting2.TryGetValue(current1, out var routeVisited2))
                 {
                     //route from both ends concatenated
                     var res = new List<Node<T>>();
@@ -271,7 +394,7 @@ namespace TreesAndGraphs
                     return res.ToArray();
                 }
 
-                for (var i = 0; adjacent1 != null &&  i<adjacent1.Length; i++)
+                for (var i = 0; adjacent1 != null && i < adjacent1.Length; i++)
                 {
                     var ch = adjacent1[i];
                     if (!visiting1.ContainsKey(ch))
@@ -296,16 +419,70 @@ namespace TreesAndGraphs
                     }
 
                 }
-
-
             }
-
             return [];
-
         }
 
 
 
+        public static BinaryTree<T> GetMinimalTree<T>(T[] orderedNodes) {
+            return new BinaryTree<T>(MinimalTree(orderedNodes));
+        }
+
+        private static BinaryTreeNode<T> MinimalTree<T>(T[] orderedNodes)
+        {
+
+            if (orderedNodes.Length == 0) return null;
+
+            var mid = orderedNodes.Length / 2;
+            var root = new BinaryTreeNode<T>(orderedNodes[mid]);
+
+            if (mid > 0)
+            {
+                root.Left = MinimalTree(orderedNodes[0..(mid)]);
+
+                if ((mid + 1) <= (orderedNodes.Length - 1))
+                {
+                    root.Right = MinimalTree(orderedNodes[(mid + 1)..(orderedNodes.Length)]);
+                }
+
+            }
+            return root;
+        }
+
+
+
+        public static void InOrderTraversal<T>(BinaryTree<T> binaryTree, Action<Node<T>> visitFn)
+        {
+
+            if (binaryTree == null) return;
+
+            InOrderTraversal(binaryTree.Root, visitFn);
+
+        }
+
+        private static void InOrderTraversal<T>(BinaryTreeNode<T> root, Action<Node<T>> visitFn)
+        {
+            if (root == null) return;
+
+            if (root.Left != null)
+            {
+
+                InOrderTraversal(root.Left, visitFn);
+            }
+
+            visitFn(root);
+
+            if (root.Right != null)
+            {
+                InOrderTraversal(root.Right, visitFn);
+            }
+        }
+
+        public static Action<Node<T>> CollectInOrder<T>(List<Node<T>> nodesVisited) {
+
+            return (Node<T> node) => { nodesVisited.Add(node); };
+        }
     }
 
 }
