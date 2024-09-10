@@ -243,6 +243,84 @@ namespace cracking_code_tests
 
         }
 
+
+        [TestMethod]
+        public void TestCheckBalanced()
+        {
+
+            int[] originalNodes = [1, 2, 3, 4, 5, 6];
+
+            var result = TreesAndGraphs.TreesAndGraphs.GetMinimalTree(originalNodes);
+
+            var balanced = TreesAndGraphs.TreesAndGraphs.CheckBalanced(result);
+
+            Assert.IsTrue(balanced);
+
+        }
+
+
+        [TestMethod]
+        public void TestCheckBalancedOnAnUnbalancedTree()
+        {
+
+            //build a linear tree, just a root with a child and a child of this 1->2->3
+            BinaryTreeNode<int> childOfChildOfRoot = new BinaryTreeNode<int>(3);
+            BinaryTreeNode<int> childOfroot = new BinaryTreeNode<int>(2, null, childOfChildOfRoot);
+            BinaryTreeNode<int> root = new BinaryTreeNode<int>(1, null, childOfroot);
+
+            var balanced = TreesAndGraphs.TreesAndGraphs.CheckBalanced(new BinaryTree<int>(root));
+
+            Assert.IsFalse(balanced);
+
+        }
+
+
+
+        [TestMethod]
+        public void TestValidateBST()
+        {
+
+            int[] originalNodes = [1, 2, 3, 4, 5, 6];
+
+            var result = TreesAndGraphs.TreesAndGraphs.GetMinimalTree(originalNodes);
+
+            var isBST = TreesAndGraphs.TreesAndGraphs.ValidateBST(result);
+
+            Assert.IsTrue(isBST);
+
+        }
+
+
+        [TestMethod]
+        public void TestIsNotABST()
+        {
+
+            //build a linear tree, just a root with a child and a child of this 1->2->3 (all of them the left child)
+            BinaryTreeNode<int> childOfChildOfRoot = new BinaryTreeNode<int>(3);
+            BinaryTreeNode<int> childOfRoot = new BinaryTreeNode<int>(2, null, childOfChildOfRoot);
+            BinaryTreeNode<int> root = new BinaryTreeNode<int>(1, null, childOfRoot);
+
+            var isBST = TreesAndGraphs.TreesAndGraphs.ValidateBST(new BinaryTree<int>(root));
+
+            Assert.IsFalse(isBST);
+
+        }
+
+        [TestMethod]
+        public void TestIsABSTNonBalanced()
+        {
+
+            //build a linear tree, just a root with a child and a child of this 1->2->3 (all of them the right child)
+            BinaryTreeNode<int> childOfChildOfRoot = new BinaryTreeNode<int>(3);
+            BinaryTreeNode<int> childOfRoot = new BinaryTreeNode<int>(2, childOfChildOfRoot, null);
+            BinaryTreeNode<int> root = new BinaryTreeNode<int>(1, childOfRoot, null);
+
+            var isBST = TreesAndGraphs.TreesAndGraphs.ValidateBST(new BinaryTree<int>(root));
+
+            Assert.IsTrue(isBST);
+
+        }
+
     }
 }
 

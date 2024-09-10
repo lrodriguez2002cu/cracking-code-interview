@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
+using static LinkedLists.LinkedLists;
 namespace TreesAndGraphs
 {
     /*
@@ -516,6 +517,72 @@ namespace TreesAndGraphs
             }
 
         }
+
+
+        // Check balanced
+        public static bool CheckBalanced<T>(BinaryTree<T> tree)
+        {
+            CheckBalanced<T>(tree.Root, 0, out var result);
+            return result;
+        }
+
+        private static int CheckBalanced<T>(BinaryTreeNode<T> treeNode, int depth, out bool balanced)
+        {
+            if (treeNode == null) {
+               balanced = true;
+               return depth;
+            }
+
+            var depthRight = depth;
+            var depthLeft = depth;
+
+            bool leftBalanced =  true;
+            bool rightBalanced = true;
+
+            if (treeNode.Left != null)
+            {
+                depthLeft= CheckBalanced<T>(treeNode.Left, depth + 1, out leftBalanced);
+            }
+
+            if (treeNode.Right != null)
+            {
+                depthRight = CheckBalanced<T>(treeNode.Right, depth + 1, out rightBalanced);
+            }
+
+            balanced = leftBalanced && rightBalanced && Math.Abs(depthRight - depthLeft) <= 1;
+
+            return int.Max(depthLeft, depthRight);
+        }
+
+        // Check balanced
+        public static bool ValidateBST<T>(BinaryTree<T> tree) where T: IComparable<T>
+        {
+            return ValidateBST<T>(tree.Root);
+            
+        }
+
+        private static bool ValidateBST<T>(BinaryTreeNode<T> treeNode) where T: IComparable<T>
+        {
+            if (treeNode == null)
+            {
+                return true;
+            }
+
+            bool result = true;
+
+            if (treeNode.Right != null) {
+                result = result && (treeNode.Right.Value.CompareTo(treeNode.Value) > 0) && ValidateBST<T>(treeNode.Right);
+            }
+
+            if (treeNode.Left != null)
+            {
+                result = result && (treeNode.Left.Value.CompareTo(treeNode.Value) <= 0) && ValidateBST<T>(treeNode.Left);
+            }
+
+            return  result;
+
+        }
+
     }
 
 }
