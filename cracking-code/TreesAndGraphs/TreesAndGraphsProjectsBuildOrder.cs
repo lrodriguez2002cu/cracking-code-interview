@@ -1,17 +1,11 @@
 
 
-using LinkedLists;
 using System.Diagnostics;
-using System.Dynamic;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
-using static LinkedLists.LinkedLists;
 namespace TreesAndGraphs
 {
     /*
       Cracking the coding interview)
     */
-
     public partial class TreesAndGraphs
     {
 
@@ -42,10 +36,9 @@ namespace TreesAndGraphs
             //values contains the number of dependencies of each node..
             var sorted = values.OrderBy(e => e.Value);
 
+            // the result would be the nodes ordered form less dependent to more dependent
             return sorted.Select(s=>s.Key.Value).ToArray();
 
-            //position contains an ordered list of projects from less dependent to most dependent on others
-            // the less dependent are a good starting point to start with..
 
 
             Node<T>? findNode(T val, Node<T>[] prjNodes) {
@@ -57,8 +50,6 @@ namespace TreesAndGraphs
                 }
                 return null;
             }
-
-            return [];
 
         }
         
@@ -78,7 +69,7 @@ namespace TreesAndGraphs
             }
         }
 
-        public static Action<Node<T> , Node<T>[] > visitFn<T>(/*Node<int> node, Node<int>[] adjacent, */Dictionary<Node<T>, int> values)
+        public static Action<Node<T> , Node<T>[] > visitFn<T>(Dictionary<Node<T>, int> values)
         {
             return (Node<T> node, Node<T>[] adjacent) =>
             {

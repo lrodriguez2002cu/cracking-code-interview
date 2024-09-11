@@ -373,6 +373,7 @@ namespace TreesAndGraphs
                     visiting2.Add(current2, t2!.Route);
                 }
 
+                // Check wether both have searches have met
                 if (current2 != null && visiting1.TryGetValue(current2, out var routeVisited1))
                 {
                     //route from both ends concatenated
@@ -396,36 +397,28 @@ namespace TreesAndGraphs
                     return res.ToArray();
                 }
 
-                for (var i = 0; adjacent1 != null && i < adjacent1.Length; i++)
-                {
-                    var ch = adjacent1[i];
-                    if (!visiting1.ContainsKey(ch))
-                    {
-                        var newRoute = new List<Node<T>>();
-                        newRoute.AddRange(route1!);
-                        newRoute.Add(ch);
-                        queue1.Enqueue(new NR<T>(ch, newRoute));
-                    }
+                ProcessAdjacentNodes(visiting1, queue1, route1, adjacent1);
+                ProcessAdjacentNodes(visiting2, queue2, route2, adjacent2);
 
-                }
-
-                for (var i = 0; i < adjacent2.Length; i++)
-                {
-                    var ch = adjacent2[i];
-                    if (!visiting2.ContainsKey(ch))
-                    {
-                        var newRoute = new List<Node<T>>();
-                        newRoute.AddRange(route2!);
-                        newRoute.Add(ch);
-                        queue2.Enqueue(new NR<T>(ch, newRoute));
-                    }
-
-                }
             }
             return [];
         }
 
+        private static void ProcessAdjacentNodes<T>(Dictionary<Node<T>, List<Node<T>>> visiting1, Queue<NR<T>> queue1, List<Node<T>>? route1, Node<T>[] adjacent1)
+        {
+            for (var i = 0; adjacent1 != null && i < adjacent1.Length; i++)
+            {
+                var ch = adjacent1[i];
+                if (!visiting1.ContainsKey(ch))
+                {
+                    var newRoute = new List<Node<T>>();
+                    newRoute.AddRange(route1!);
+                    newRoute.Add(ch);
+                    queue1.Enqueue(new NR<T>(ch, newRoute));
+                }
 
+            }
+        }
 
         public static BinaryTree<T> GetMinimalTree<T>(T[] orderedNodes) {
             return new BinaryTree<T>(MinimalTree(orderedNodes));
