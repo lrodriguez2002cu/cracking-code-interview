@@ -434,7 +434,7 @@ namespace cracking_code_tests
 
             Assert.AreEqual(commonAncestor, node2);
         }
-
+        
     }
 }
 

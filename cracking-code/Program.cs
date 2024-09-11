@@ -9,14 +9,42 @@
 // Console.WriteLine("Result rotated by 90 degrees:");
 // //StringsAndArrays.StringsAndArrays.PrintMatrix(matrix);
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Formats.Asn1;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
+using ThreadsAndLocks;
 
 public static class Example
 {
 
-    public static void Main()
+    public static async Task Main2()
+    {
+        CancellationTokenSource cts = new CancellationTokenSource();
+        ThreadsAndLocks.ThreadsAndLocks.DinningPhilosophersAsync(4, cts, deadlock: true);
+
+        var k = Console.ReadKey();
+        if (k.Key == ConsoleKey.C) {
+            Console.WriteLine("Cancelling dinner...");
+           cts.Cancel();
+        }
+    }
+
+    public static async Task Main()
+    {
+        CancellationTokenSource cts = new CancellationTokenSource();
+        ThreadsAndLocks.ThreadsAndLocks.DinningPhilosophersAsync(4, cts, deadlock: false);
+
+        var k = Console.ReadKey();
+        if (k.Key == ConsoleKey.C)
+        {
+            Console.WriteLine("Cancelling dinner...");
+            cts.Cancel();
+        }
+    }
+
+    public static void Main1()
     {
         // Interrupt a sleeping thread.
         // var sleepingThread = new Thread(Example.SleepIndefinitely);
