@@ -1,45 +1,44 @@
-﻿// // See https://aka.ms/new-console-template for more information
-// int[][] matrix = new int[][] { [1, 2, 3], [4, 5, 6], [7, 8, 9] };
-
-// Console.WriteLine("Original:");
-// StringsAndArrays.StringsAndArrays.PrintMatrix(matrix);
-
-// StringsAndArrays.StringsAndArrays.RotateMatrixV1(matrix, 0);
-
-// Console.WriteLine("Result rotated by 90 degrees:");
-// //StringsAndArrays.StringsAndArrays.PrintMatrix(matrix);
-
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Formats.Asn1;
-using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
-using ThreadsAndLocks;
-
+﻿
 public static class Example
 {
 
     public static async Task Main2()
     {
         CancellationTokenSource cts = new CancellationTokenSource();
-        ThreadsAndLocks.ThreadsAndLocks.DinningPhilosophersAsync(4, cts, deadlock: true);
 
-        var k = Console.ReadKey();
-        if (k.Key == ConsoleKey.C) {
-            Console.WriteLine("Cancelling dinner...");
-           cts.Cancel();
-        }
-    }
-
-    public static async Task Main()
-    {
-        CancellationTokenSource cts = new CancellationTokenSource();
-        ThreadsAndLocks.ThreadsAndLocks.DinningPhilosophersAsync(4, cts, deadlock: false);
+        await ThreadsAndLocks.DinningPhilosophers.DinningPhilosophersAsync(4, cts, deadlock: true);
 
         var k = Console.ReadKey();
         if (k.Key == ConsoleKey.C)
         {
             Console.WriteLine("Cancelling dinner...");
+            cts.Cancel();
+        }
+    }
+
+    public static async Task Main3()
+    {
+        CancellationTokenSource cts = new CancellationTokenSource();
+        await ThreadsAndLocks.DinningPhilosophers.DinningPhilosophersAsync(4, cts, deadlock: false);
+
+        var k = Console.ReadKey();
+        if (k.Key == ConsoleKey.C)
+        {
+            Console.WriteLine("Cancelling dinner...");
+            cts.Cancel();
+        }
+    }
+
+
+    public static async Task Main()
+    {
+        CancellationTokenSource cts = new CancellationTokenSource();
+        await ThreadsAndLocks.FizzBuzz.FizzBuz(400, cts.Token);
+
+        var k = Console.ReadKey();
+        if (k.Key == ConsoleKey.C)
+        {
+            Console.WriteLine("Cancelling number production for FizzBuzz...");
             cts.Cancel();
         }
     }

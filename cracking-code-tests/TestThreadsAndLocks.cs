@@ -13,7 +13,7 @@ public class ThreadsAndLocksTests
     public async Task TestDinningPhilosophers()
     {
         var cts = new CancellationTokenSource();
-        await ThreadsAndLocks.DinningPhilosophersAsync(4, cts, false);
+        await DinningPhilosophers.DinningPhilosophersAsync(4, cts, false);
         await Task.Delay(1000);
         cts.Cancel();
         await Task.Delay(1000);        

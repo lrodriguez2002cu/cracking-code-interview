@@ -1,9 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace ThreadsAndLocks
 {
-    /*
-      Cracking the coding interview)
-    */
-    public partial class ThreadsAndLocks
+    public class DinningPhilosophers
     {
 
         public static async Task DinningPhilosophersAsync(int numberOfPhilosophers, CancellationTokenSource ts, bool deadlock)
@@ -83,9 +86,10 @@ namespace ThreadsAndLocks
                                     Console.WriteLine($"Philosopher {philosopher} held right.");
                                     Console.WriteLine($"Philosopher {philosopher} is eating..using {Thread.CurrentThread.ManagedThreadId}");
                                 }
-                                finally { 
+                                finally
+                                {
                                     Monitor.Exit(rightShopstick);
-                                
+
                                 }
                             }
                             else
@@ -105,11 +109,5 @@ namespace ThreadsAndLocks
             }
         }
 
-
-
-
-
     }
-
 }
-
