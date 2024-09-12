@@ -33,13 +33,13 @@ public static class Example
     public static async Task Main()
     {
         CancellationTokenSource cts = new CancellationTokenSource();
-        await ThreadsAndLocks.FizzBuzz.FizzBuz(400, cts.Token);
+        await ThreadsAndLocks.FizzBuzz.FizzBuz(400, cts);
 
         var k = Console.ReadKey();
         if (k.Key == ConsoleKey.C)
         {
-            Console.WriteLine("Cancelling number production for FizzBuzz...");
-            cts.Cancel();
+            
+            //cts.Cancel();
         }
     }
 

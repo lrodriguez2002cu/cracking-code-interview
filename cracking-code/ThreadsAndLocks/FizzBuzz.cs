@@ -8,9 +8,10 @@ namespace ThreadsAndLocks
     public partial class FizzBuzz
     {
 
-        public static async Task FizzBuz(int n, CancellationToken ct)
+        public static async Task FizzBuz(int n, CancellationTokenSource cts)
         {
             ConcurrentQueue<int> integerQueue = new ();
+            CancellationToken ct = cts.Token;
 
             //This thread will put numbers in a queue            
             var numProducer = Task.Run(() =>
@@ -25,6 +26,9 @@ namespace ThreadsAndLocks
                         Task.Delay(500).Wait();
                     }
                 }
+                
+                Console.WriteLine("Cancelling number production for FizzBuzz...");
+                cts.Cancel();
             }, ct);
 
             //Others will remove the numbers and process them
@@ -47,12 +51,14 @@ namespace ThreadsAndLocks
                    Task.Delay(200).Wait();
                 }
 
+                Console.WriteLine("Fizz finished...");
+
             }, ct);
 
             var taskBuzz = Task.Run(() =>
             {
                 Console.WriteLine("Buzz started...");
-                while (!ct.IsCancellationRequested)
+                while (!ct.IsCancellationRequested) 
                 {
                     if (integerQueue.TryPeek(out int i))
                     {
@@ -69,6 +75,8 @@ namespace ThreadsAndLocks
 
                     Task.Delay(200).Wait();
                 }
+                Console.WriteLine("Buzz finished...");
+
             }, ct);
 
             var taskFizzBuzz = Task.Run(() =>
@@ -91,6 +99,8 @@ namespace ThreadsAndLocks
                     }
                     Task.Delay(200).Wait();
                 }
+
+                Console.WriteLine("FizzBuzz finished...");
 
             }, ct);
 
