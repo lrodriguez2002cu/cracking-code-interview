@@ -43,4 +43,52 @@ public class SortingAndSearchingTests
         CollectionAssert.AreEqual(new int[] { 1, 2, 3, 3, 5, 0, 0 }, A);
     }
 
+
+
+    [TestMethod]
+    public void TestSortWithAnagrams()
+    {
+        var strings = new string[] { "abc", "def", "bca", "fed", "cab", "fed" };
+        SortingAndSearching.SortingAndSearching.GroupAnagrams(strings);
+        CollectionAssert.AreEqual(new string[] { "abc", "cab", "bca", "def", "fed", "fed" }, strings);
+    }
+
+
+    [TestMethod]
+    public void TestSortWithAnagrams1()
+    {
+        var strings = new string[] { "abc", "bca", "cab"};
+        SortingAndSearching.SortingAndSearching.GroupAnagrams(strings);
+        CollectionAssert.AreEqual(new string[] { "abc", "bca", "cab"}, strings);
+    }
+
+
+    [TestMethod]
+    public void TestSortWithAnagrams2()
+    {
+        var strings = new string[] { "abc", "cab", "bca" };
+        SortingAndSearching.SortingAndSearching.GroupAnagrams(strings);
+        CollectionAssert.AreEqual(new string[] { "abc", "bca", "cab" }, strings);
+    }
+
+
+    [TestMethod]
+    public void TestSortWithAnagrams3()
+    {
+        var strings = new string[] { "abc", "def", "cab", "bca" };
+        SortingAndSearching.SortingAndSearching.GroupAnagrams(strings);
+        CollectionAssert.AreEqual(new string[] { "abc", "bca", "cab" , "def"}, strings);
+    }
+
+
+    [TestMethod]
+    [DataRow("abc", "cba", true)]
+    [DataRow("abc", "cab", true)]
+    [DataRow("abc", "cad", false)]
+    [DataRow("def", "efc", false)]
+    public void TestAnagrams(string s1, string s2, bool expected)
+    {
+        var result = SortingAndSearching.SortingAndSearching.IsAnagram(s1, s2);
+        Assert.AreEqual(expected, result);
+    }
 }
